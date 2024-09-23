@@ -1,0 +1,6 @@
+{
+  "usuario": { "0": "Administrador", "1": "Users" },
+  "password": { "0": "admin", "1": "users" },
+  "correo": { "0": "administrador@gmail.com", "1": "users@gmail.com" },
+  "tipo de usuario": { "0": "admin", "1": "users" }
+}
