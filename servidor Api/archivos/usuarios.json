@@ -1,6 +1,14 @@
 {
-  "usuario": { "0": "Administrador", "1": "Users" },
-  "password": { "0": "admin", "1": "users" },
-  "correo": { "0": "administrador@gmail.com", "1": "users@gmail.com" },
-  "tipo de usuario": { "0": "admin", "1": "users" }
+    "Administrador": {
+        "usuario": "Administrador",
+        "password": "admin",
+        "correo": "administrador@gmail.com",
+        "tipo de usuario": "admin"
+    },
+    "Users": {
+        "usuario": "Users",
+        "password": "users",
+        "correo": "users@gmail.com",
+        "tipo de usuario": "users"
+    }
 }
