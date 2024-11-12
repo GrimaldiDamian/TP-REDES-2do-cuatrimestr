@@ -16,19 +16,23 @@ class Screen():
         for eventos in pygame.event.get():
             if eventos.type == pygame.QUIT:
                 self.runnig = False
+            if etapa == 'login':
+                self.login.manejo_evento(eventos)
 
     def dibujar(self):
 
         # self.screen.fill("red")
         if etapa in ["login","crear"]:
-            self.login.dibujar(self.screen)
+            self.login.dibujar(self.screen,self.fuente)
 
         pygame.display.flip()
 
     def bucle_principal(self):
+        pygame.key.start_text_input()
         while self.runnig:
             self.manejo_eventos()
 
             self.reloj.tick(60)
 
             self.dibujar()
+        pygame.key.stop_text_input()
