@@ -1,10 +1,10 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Annotated
 from jose import jwt
 from manejo_archivo import abrir_archivo, ruta
 
-contraseña = OAuth2PasswordBearer(tokenUrl="token") #token tiene que estar creada
+contraseña = OAuth2PasswordBearer(tokenUrl="token")
 users = abrir_archivo(f"{ruta}usuarios.json")
 
 secret_key = "Digimon Adventure"

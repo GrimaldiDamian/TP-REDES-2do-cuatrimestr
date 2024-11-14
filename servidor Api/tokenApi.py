@@ -6,6 +6,7 @@ from usuarioApi import Obtener_usuario
 from jose import jwt
 
 token_router = APIRouter()
+contraseña = OAuth2PasswordBearer(tokenUrl="token")
 
 @token_router.post("/token")
 def token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
@@ -15,4 +16,4 @@ def token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         raise HTTPException(status_code=400, detail="Usuario o password incorrecto")
 
     token = encode_token({"usuario": usuario["usuario"], "email": usuario["correo"]})
-    return token
+    return {"access_token": token, "token_type": "bearer"}

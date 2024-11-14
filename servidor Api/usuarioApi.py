@@ -49,6 +49,17 @@ def Crear_cuenta (usuario :str,contraseña:str,correo:str ,tipo_usuario = "users
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ocurrió un error: {e}")
 
+def actualizar(user : dict, usuario : str, campo : str, cambio : str):
+    if usuario in usuarios:
+        if user["tipo de usuario"] == "admin" or user["usuario"] == usuario:
+            usuarios[usuario][campo] = cambio
+            guardar_archivo(nombre_archivo, usuarios)
+            return "La información se guardó correctamente."
+        else:
+            raise HTTPException(status_code=400, detail="No tiene permisos para realizar esta acción.")
+    else:
+        raise HTTPException(status_code=400, detail = "No existe usuario")
+
 @usuario_router.put("/Actualizar_tipo")
 def Actualizar_tipo(user: Annotated[dict,Depends(decode_token)],nick : str, tipo : str):
     if user["tipo de usuario"] != "admin":
@@ -61,35 +72,21 @@ def Actualizar_tipo(user: Annotated[dict,Depends(decode_token)],nick : str, tipo
         else:
             raise HTTPException(status_code=400, detail=f"No existe ningun usuario registrado como {nick}")
 
+@usuario_router.put("/Actualizar password")
+def actualizar_password(user: Annotated[dict,Depends(decode_token)],usuario : str, password : str):
+    return actualizar(user,usuario,"password",password)
+
 @usuario_router.put("/Actualizar correo")
 def actualizar_correo(user: Annotated[dict,Depends(decode_token)],usuario : str, correo : str):
-    if usuario in usuarios:
-        if user["tipo de usuario"] == "admin":
-            usuarios[usuario]["correo"] = correo
-            guardar_archivo(nombre_archivo,usuarios)
-            return f"Se guardo correctamente"
-        else:
-            if user["usuario"] == usuario:
-                usuarios[usuario]["correo"] = correo
-                guardar_archivo(nombre_archivo,usuarios)
-                return f"Se guardo correctamente"
-            else:
-                raise HTTPException(status_code = "400", detail = "Usuario incorrecto")
-    else:
-        raise HTTPException(status_code="400", detai = "No existe usuario")
+    return actualizar(user,usuario,"correo",correo)
 
 @usuario_router.delete("/eliminar usuario")
 def eliminar_usuario(user: Annotated[dict,Depends(decode_token)],usuario : str):
     if usuario in usuarios:
-        if user["usuario"] == usuario:
+        if user["usuario"] == usuario or user["tipo de usuario"] == "admin":
             usuarios.pop(usuario)
             guardar_archivo(nombre_archivo,usuarios)
             return f"Se elimino correctamente"
-        elif user["tipo de usuario"] == "admin":
-            usuarios.pop(usuario)
-            guardar_archivo(nombre_archivo,usuarios)
-            return f"Se elimino correctamente"
-        else:
-            raise HTTPException(status_code="400", detail = "No se puede eliminar dicho usuario")
+        raise HTTPException(status_code=400, detail = "No se puede eliminar dicho usuario")
     else:
-        raise HTTPException(status_code="400", detail = "No existe dicho usuario")
+        raise HTTPException(status_code=400, detail = "No existe dicho usuario")
