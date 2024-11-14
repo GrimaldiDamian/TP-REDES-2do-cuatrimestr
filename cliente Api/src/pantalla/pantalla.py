@@ -16,13 +16,13 @@ class Screen():
         for eventos in pygame.event.get():
             if eventos.type == pygame.QUIT:
                 self.runnig = False
-            if etapa == 'login':
+            if global_variables.etapa == 'login':
                 self.login.manejo_evento(eventos)
 
     def dibujar(self):
 
         # self.screen.fill("red")
-        if etapa in ["login","crear"]:
+        if global_variables.etapa in ["login","crear"]:
             self.login.dibujar(self.screen,self.fuente)
 
         pygame.display.flip()
