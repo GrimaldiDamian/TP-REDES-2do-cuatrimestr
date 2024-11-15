@@ -6,7 +6,7 @@ url = "http://localhost:8000"
 
 class variables_globales():
     def __init__(self) -> None:
-        self.etapa = "login"
+        self.etapa = "Inicio"
         self.token = ""
 
 global_variables = variables_globales()

@@ -167,7 +167,7 @@ class login():
             response = requests.post(f"{url}/token", data=data)
             global_variables.token = response.json()
             self.resetear()
-            global_variables.etapa = "menu"
+            global_variables.etapa = "Menu"
         except:
             self.resetear()
             print("Login failed. Please try again.")

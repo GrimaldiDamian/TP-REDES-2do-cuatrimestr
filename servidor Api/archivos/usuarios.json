@@ -10,5 +10,11 @@
         "password": "users",
         "correo": "users@gmail.com",
         "tipo de usuario": "users"
+    },
+    "p": {
+        "usuario": "p",
+        "password": "p",
+        "correo": "p",
+        "tipo de usuario": "users"
     }
 }
