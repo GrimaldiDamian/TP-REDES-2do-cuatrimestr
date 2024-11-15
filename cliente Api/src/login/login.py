@@ -57,11 +57,13 @@ class login():
             elif event.key == pygame.K_RETURN:
                 if self.momento == "Login":
                     self.momento = "Password"
-                else:
+                elif self.momento == 'Password':
                     if global_variables.etapa == "login":
                         self.login()
                     else:
-                        self.creacion_cuenta()
+                        self.momento = "Correo"
+                else:
+                    self.creacion_cuenta()
             elif event.key == pygame.K_TAB:
                 if self.momento == "Login":
                     self.momento = "Password"
@@ -72,6 +74,9 @@ class login():
                         self.momento = "Correo"
                 else:
                     self.momento = "Login"
+            elif event.key == pygame.K_ESCAPE:
+                global_variables.etapa = "Inicio"
+                self.resetear()
 
     def dibujar_inicio(self,screen : pygame.Surface,fuente : pygame.font):
         """
@@ -102,7 +107,7 @@ class login():
         """
         self.dibujar_inicio(screen,fuente)
         x = self.centrar_texto('Ingrese correo electronico',fuente)
-        y = 3*tamaño_letra
+        y = 4*tamaño_letra
         self.dibujar_texto(screen,'Ingrese correo electronico',fuente,x,y)
         y+= tamaño_letra
         x = self.centrar_texto(self.correo,fuente)
@@ -118,7 +123,7 @@ class login():
         screen.blit(self.img, (0,0))
         if global_variables.etapa == "login":
             self.dibujar_inicio(screen,fuente)
-        elif global_variables.etapa == "creacion":
+        elif global_variables.etapa == "crear":
             self.dibujar_creacion(screen,fuente)
 
     def resetear(self):
@@ -127,29 +132,32 @@ class login():
         """
         self.logeo = ""
         self.password = ""
+        if global_variables.etapa == "crear":
+            self.correo = ""
         self.momento = "Login"
 
     def creacion_cuenta(self):
         """
-        Realiza el proceso de creación de la cuenta
+        Realiza el proceso de creación de la cuenta.
+        Donde si es exitoso se cambia la etapa a login y en caso contrario se resetean los valores.
         """
+        data = {
+            "usuario": self.logeo,
+            "contraseña": self.password,
+            "correo": self.correo
+        }
         try:
-            data = {
-                "username": self.logeo,
-                "password": self.password,
-                "email": self.correo
-            }
-            response = requests.post(f"{url}/usuarios/Crear cuenta", data=data)
-            print(response.json())
+            response = requests.post(f"{url}/usuarios/Crear cuenta", params=data)
             self.resetear()
-            global_variables.etapa = "login"
-        except:
+            global_variables.etapa = "Inicio"
+        except Exception as e:
             self.resetear()
             print("Account creation failed. Please try again.")
 
     def login(self):
         """
-        Realiza el proceso de login
+        Realiza el proceso de login.
+        Donde si es exitoso se cambia la etapa a menu y en caso contrario se resetean los valores.
         """
         try:
             data = {
